@@ -80,6 +80,8 @@ export default function App() {
   
   return (
     <div>
+      <img src="../public/covalent_logo.jpeg" width="100px" className="logo"/>
+      <h1 className="title">Even Easier Covalent</h1>
       <div className="App">
         <Dropdown
           isSearchable

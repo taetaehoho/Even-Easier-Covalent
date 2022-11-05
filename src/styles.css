@@ -8,4 +8,12 @@
   .App > * {
     flex: 1;
   }
-  
+
+  .title {
+    display: flex;
+  }
+
+  .logo {
+    display: flex;
+    width: 8%;
+  }
