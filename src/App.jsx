@@ -10,6 +10,7 @@ export default function App() {
   const [apikey, setApiKey] = useState("")
   const [address, setAddress] = useState("")
   const [jsonResponse, setJsonResponse] = useState("")
+  const [tokenId, setTokenId] = useState("")
 
   const chainIds = [
     { value: "1", label: "1: Mainnet" },
@@ -52,13 +53,30 @@ export default function App() {
 
   const apicall = async () => {
     const baseURL = 'https://api.covalenthq.com/v1'
-    const url = new URL(`${baseURL}/${chainId.value}/address/${address}/balances_v2/?key=${apikey}`);
+
+    let url = ""
+    if (broadEndpoint.value=="address"){
+      url = new URL(`${baseURL}/${chainId.value}/address/${address}/${endpoint.value}/?key=${apikey}`);
+    } else if (broadEndpoint.value=="tokens") {
+      if (endpoint.value == "nft_token_ids") {
+        url = new URL(`${baseURL}/${chainId.value}/tokens/${address}/${endpoint.value}/?key=${apikey}`);
+      } else {
+        url = new URL(`${baseURL}/${chainId.value}/tokens/${address}/${endpoint.value}/${tokenId}/?key=${apikey}`);
+      }
+    } else if (broadEndpoint.value=="address1") {
+      url = new URL(`${baseURL}/${chainId.value}/address/${address}/${endpoint.value}/?key=${apikey}`);
+    }
+
+    console.log(endpoint)
+    
     const response = await fetch(url);
     if(response.status != 200) {
       setJsonResponse("Something went wrong")
+      console.log(response.status)
     } else {    
       const result = await response.json();
       const data = result.data;
+      console.log(response.status)
       setJsonResponse(data);
     }
   }
@@ -107,6 +125,8 @@ export default function App() {
         <input placeholder="apikey" required onChange={(value) => setApiKey(value.target.value)}>
         </input>
         <input placeholder="address" onChange={(value) => setAddress(value.target.value)}>
+        </input>
+        <input placeholder="tokenId" onChange={(value) => setTokenId(value.target.value)}>
         </input>
         <button onClick={apicall}>Submit</button>
       </div>
